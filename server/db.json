@@ -1,0 +1,46 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "email": "pochacco@example.com",
+      "password": "pochacco229",
+      "createdTime": "1679560161881",
+      "deleted": false
+    }
+  ],
+  "posts": [
+    {
+      "id": "000000",
+      "userId": 1,
+      "content": "這裡是測風向主題的故事敘述。<br />沒有其他詳細要補充的話什麼都不寫也沒關係，最後會以測風向的問題作為基準，根據發文者的角度表示贊同或是反對，依據贊同與反對的數量顯示此篇匿名文章是順風還是逆風。<br />順風的意義為大部分人與發文者是相似價值觀，而逆風則相反。<br /><br />補充：記得再次檢查內容再發文，文章發出後不提供編輯以影響風向結果。",
+      "question": "測風向的主要問題，記得傳達到發文者自己的方向。",
+      "createdTime": "1679560336354",
+      "deleted": false
+    }
+  ],
+  "saved_posts": [
+    {
+      "userId": 1,
+      "postId": "000000"
+    }
+  ],
+  "responses": [
+    {
+      "postId": "000000",
+      "userId": 1,
+      "response": "positive"
+    }
+  ],
+  "tags": [
+    {
+      "id": 1,
+      "name": "Test Tag"
+    }
+  ],
+  "tags_posts_association": [
+    {
+      "tagId": 1,
+      "postId": "000000"
+    }
+  ]
+}
