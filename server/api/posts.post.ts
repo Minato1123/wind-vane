@@ -1,5 +1,5 @@
 import { db } from '../plugins/dataController'
-import { createSuccessResponse, generatePostId, getUserId } from '../utils/index'
+import { createErrorResponse, createSuccessResponse, generatePostId, getUserId } from '../utils/index'
 
 export default defineEventHandler(async (event) => {
   const body = await readBody<{
@@ -14,7 +14,15 @@ export default defineEventHandler(async (event) => {
     newPostId = generatePostId()
   }
 
-  const userId = getUserId()
+  const theToken = event.node.req.headers['access-token'] as string
+  const userId = await getUserId(theToken)
+
+  if (userId == null) {
+    return createErrorResponse({
+      message: 'Bad request',
+    })
+  }
+
   const createdTime = `${Date.now()}`
 
   db.data.posts.push({

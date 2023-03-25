@@ -1,16 +1,28 @@
 import { db } from '../plugins/dataController'
-import { createSuccessResponse, getUserId } from '../utils/index'
+import { createErrorResponse, createSuccessResponse, getUserId } from '../utils/index'
 
-export default defineEventHandler((event) => {
-  const userId = getUserId()
+export default defineEventHandler(async (event) => {
+  const theToken = event.node.req.headers['access-token'] as string
+  const userId = await getUserId(theToken)
+
   const query = getQuery(event)
 
   const postIdList: string[] = []
 
   if (query.type === 'savedPost') {
+    if (userId == null) {
+      return createErrorResponse({
+        message: 'Bad request',
+      })
+    }
     postIdList.push(...db.data.saved_posts.filter(u => u.userId === +userId).map(p => p.postId))
   }
   else if (query.type === 'responsedPost') {
+    if (userId == null) {
+      return createErrorResponse({
+        message: 'Bad request',
+      })
+    }
     postIdList.push(...db.data.responses.filter(u => u.userId === +userId).map(p => p.postId))
   }
   else if (query.type === 'tagsPost') {

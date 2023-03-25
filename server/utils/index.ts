@@ -20,6 +20,7 @@ export function generatePostId() {
   return Math.floor(Math.random() * 1000000).toString().padStart(6, '0')
 }
 
-export function getUserId() {
-  return 1
+export async function getUserId(theToken: string) {
+  const tokenData = await useStorage('db').getItem(`token:${theToken}`) as { userId: number } | null
+  return tokenData?.userId
 }

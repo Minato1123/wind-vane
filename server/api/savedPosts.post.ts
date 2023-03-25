@@ -5,7 +5,14 @@ export default defineEventHandler(async (event) => {
   const body = await readBody<{
     postId: string
   }>(event)
-  const userId = getUserId()
+  const theToken = event.node.req.headers['access-token'] as string
+  const userId = await getUserId(theToken)
+
+  if (userId == null) {
+    return createErrorResponse({
+      message: 'Bad request',
+    })
+  }
 
   const post = db.data.posts.find(p => p.id === body.postId && p.deleted === false)
   if (post == null)

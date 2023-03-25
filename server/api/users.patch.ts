@@ -2,7 +2,14 @@ import { db } from '../plugins/dataController'
 import { createErrorResponse, createSuccessResponse, getUserId } from '../utils/index'
 
 export default defineEventHandler(async (event) => {
-  const userId = getUserId()
+  const theToken = event.node.req.headers['access-token'] as string
+  const userId = await getUserId(theToken)
+
+  if (userId == null) {
+    return createErrorResponse({
+      message: 'Bad request',
+    })
+  }
   const body = await readBody<{
     email: string
   }>(event)

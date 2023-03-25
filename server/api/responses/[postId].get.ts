@@ -1,9 +1,16 @@
 import { db } from '../../plugins/dataController'
 import { createErrorResponse, createSuccessResponse, getUserId } from '../../utils/index'
 
-export default defineEventHandler((event) => {
+export default defineEventHandler(async (event) => {
   const { postId } = event.context.params!
-  const userId = getUserId()
+  const theToken = event.node.req.headers['access-token'] as string
+  const userId = await getUserId(theToken)
+
+  if (userId == null) {
+    return createErrorResponse({
+      message: 'Bad request',
+    })
+  }
   const post = db.data.posts.find(p => p.id === postId && p.deleted === false)
 
   if (post == null)
