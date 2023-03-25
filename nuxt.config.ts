@@ -19,5 +19,14 @@ export default defineNuxtConfig({
     // '@nuxtjs/stylelint-module',
     '@nuxtjs/device',
     'nuxt-icon',
+    '@formkit/nuxt',
+    '@pinia/nuxt',
+    '@pinia-plugin-persistedstate/nuxt',
   ],
+  pinia: {
+    autoImports: [
+      'defineStore',
+      'storeToRefs',
+    ],
+  },
 })
