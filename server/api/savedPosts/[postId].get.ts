@@ -16,8 +16,8 @@ export default defineEventHandler((event) => {
   if (post == null)
     return createErrorResponse({ message: 'Not found' })
 
-  const theResponseObj = db.data.responses.find(r => r.postId === post.id && r.userId === userId)
-  const response = theResponseObj == null ? null : theResponseObj.response
+  const savedPostData = db.data.saved_posts.find(r => r.postId === post.id && r.userId === userId)
+  const isSavedPost = savedPostData != null
 
-  return createSuccessResponse({ response })
+  return createSuccessResponse({ isSavedPost })
 })

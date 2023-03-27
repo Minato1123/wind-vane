@@ -1,3 +1,5 @@
+import { tokenMap } from '../tokenMap'
+
 export function createSuccessResponse<T>(data: T) {
   return {
     data,
@@ -20,7 +22,6 @@ export function generatePostId() {
   return Math.floor(Math.random() * 1000000).toString().padStart(6, '0')
 }
 
-export async function getUserId(theToken: string) {
-  const tokenData = await useStorage('db').getItem(`token:${theToken}`) as { userId: number } | null
-  return tokenData?.userId
+export function getUserId(theToken: string) {
+  return tokenMap.get(theToken)
 }

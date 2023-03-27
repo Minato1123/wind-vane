@@ -1,10 +1,13 @@
 import { db } from '../../plugins/dataController'
 import { createErrorResponse, createSuccessResponse, getUserId } from '../../utils/index'
 
-export default defineEventHandler((event) => {
+export default defineEventHandler(async (event) => {
   const { postId } = event.context.params!
   const theToken = event.node.req.headers['access-token'] as string
   const userId = getUserId(theToken)
+  const body = await readBody<{
+    response: 'positive' | 'negative'
+  }>(event)
 
   if (userId == null) {
     return createErrorResponse({
@@ -12,15 +15,15 @@ export default defineEventHandler((event) => {
     })
   }
 
-  const responsedIndex = db.data.responses.findIndex(p => p.postId === postId && p.userId === userId)
+  const responsedPost = db.data.responses.find(p => p.postId === postId && p.userId === userId)
 
-  if (responsedIndex === -1) {
+  if (responsedPost == null) {
     return createErrorResponse({
       message: 'Not found',
     })
   }
 
-  db.data.responses.splice(responsedIndex, 1)
+  responsedPost.response = body.response
 
   return createSuccessResponse(null)
 })

@@ -8,7 +8,7 @@ export default defineEventHandler(async (event) => {
     password: string
   }>(event)
 
-  const user = db.data.users.find(u => u.email === body.email && u.password === body.password)
+  const user = db.data.users.find(u => u.email === body.email && u.password === body.password && u.deleted === false)
   if (user == null) {
     return createErrorResponse({
       message: 'Not found',
@@ -25,5 +25,5 @@ export default defineEventHandler(async (event) => {
   const theToken = `${Date.now()}`
   tokenMap.set(theToken, user.id)
 
-  return createSuccessResponse({ token: theToken })
+  return createSuccessResponse({ token: theToken, userId: user.id })
 })

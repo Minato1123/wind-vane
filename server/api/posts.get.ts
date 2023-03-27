@@ -1,9 +1,9 @@
 import { db } from '../plugins/dataController'
 import { createErrorResponse, createSuccessResponse, getUserId } from '../utils/index'
 
-export default defineEventHandler(async (event) => {
+export default defineEventHandler((event) => {
   const theToken = event.node.req.headers['access-token'] as string
-  const userId = await getUserId(theToken)
+  const userId = getUserId(theToken)
 
   const query = getQuery(event)
 
@@ -35,15 +35,7 @@ export default defineEventHandler(async (event) => {
     postIdList.push(...db.data.posts.map(p => p.id))
   }
 
-  const posts = db.data.posts.filter(p => postIdList.includes(p.id) && p.deleted === false)
-  const postList = posts.map((p) => {
-    const numOfPositive = db.data.responses.filter(r => r.postId === p.id && r.response === 'positive').length
-    const numOfNegative = db.data.responses.filter(r => r.postId === p.id && r.response === 'negative').length
-    return {
-      ...p,
-      numOfPositive,
-      numOfNegative,
-    }
-  })
-  return createSuccessResponse(postList)
+  const posts = db.data.posts.filter(p => postIdList.includes(p.id) && p.deleted === false).reverse()
+
+  return createSuccessResponse(posts)
 })

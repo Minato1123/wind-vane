@@ -15,7 +15,7 @@ export default defineEventHandler(async (event) => {
   }
 
   const theToken = event.node.req.headers['access-token'] as string
-  const userId = await getUserId(theToken)
+  const userId = getUserId(theToken)
 
   if (userId == null) {
     return createErrorResponse({

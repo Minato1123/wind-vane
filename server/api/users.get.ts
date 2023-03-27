@@ -1,9 +1,9 @@
 import { db } from '../plugins/dataController'
 import { createErrorResponse, createSuccessResponse, getUserId } from '../utils/index'
 
-export default defineEventHandler(async (event) => {
+export default defineEventHandler((event) => {
   const theToken = event.node.req.headers['access-token'] as string
-  const userId = await getUserId(theToken)
+  const userId = getUserId(theToken)
 
   if (userId == null)
     return createErrorResponse({ message: 'Not found' })

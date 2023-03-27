@@ -3,7 +3,7 @@ import { createErrorResponse, createSuccessResponse, getUserId } from '../utils/
 
 export default defineEventHandler(async (event) => {
   const theToken = event.node.req.headers['access-token'] as string
-  const userId = await getUserId(theToken)
+  const userId = getUserId(theToken)
 
   if (userId == null) {
     return createErrorResponse({
@@ -12,6 +12,7 @@ export default defineEventHandler(async (event) => {
   }
   const body = await readBody<{
     email: string
+    newEmail: string
   }>(event)
 
   const user = db.data.users.find(u => u.id === +userId && u.deleted === false)
@@ -19,6 +20,12 @@ export default defineEventHandler(async (event) => {
   if (user == null) {
     return createErrorResponse({
       message: 'Not found',
+    })
+  }
+
+  if (user.email !== body.email) {
+    return createErrorResponse({
+      message: 'Bad request',
     })
   }
 

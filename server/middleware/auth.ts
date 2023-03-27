@@ -12,9 +12,9 @@ export default defineEventHandler((event) => {
   if (url == null)
     throw new Error('Bad Request')
 
-  if (/(users|savedPosts|responses|logout)/.test(url) && !isTokenValid)
+  if (/(users|savedPosts|logout)/.test(url) && !isTokenValid)
     throw new Error('Bad Request')
 
-  if (/(posts|tags)/.test(url) && method !== 'GET')
+  if (/(posts|tags|responses)/.test(url) && method !== 'GET' && !isTokenValid)
     throw new Error('Bad Request')
 })
