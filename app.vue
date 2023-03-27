@@ -14,7 +14,7 @@ function toggleDialog() {
     <NavBar class="w-full" @toggle-mobile-menu="isOpenMobileMenu = !isOpenMobileMenu" />
     <Menu class="absolute top-16 right-4 z-10" @open-login-dialog="isOpenLoginDialog = true" />
     <Transition name="slide-in">
-      <MobileMenu v-if="isOpenMobileMenu" :is-open-mobile-menu="isOpenMobileMenu" class="absolute block lg:hidden top-0 left-0 h-full" @close-mobile-menu="isOpenMobileMenu = false" @open-login-dialog="isOpenLoginDialog = true" />
+      <MobileMenu v-if="isOpenMobileMenu" class="absolute block lg:hidden top-0 left-0 h-full" @close-mobile-menu="isOpenMobileMenu = false" @open-login-dialog="isOpenLoginDialog = true" />
     </Transition>
     <DialogWrapper>
       <LoginDialog v-if="isOpenLoginDialog" @close-login-dialog="isOpenLoginDialog = false" @switch-register-dialog="toggleDialog" />
