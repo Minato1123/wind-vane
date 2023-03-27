@@ -1,7 +1,38 @@
 <script setup lang="ts">
+import { useUserStore } from '../stores/user'
+const emit = defineEmits<{
+  (e: 'refreshPage'): void
+}>()
 const { textarea, input } = useTextareaAutosize()
-const mainQuestion = ref('')
-watch(mainQuestion, () => mainQuestion.value = mainQuestion.value.replaceAll('\n', ''))
+const { userToken } = storeToRefs(useUserStore())
+
+const postData = ref({
+  content: input,
+  question: '',
+})
+watch(() => postData.value.question, () => postData.value.question = postData.value.question.replaceAll('\n', ''))
+const bodyContent = computed(() => postData.value.content.replaceAll('\n', '<br />'))
+
+const { pending, execute } = useLazyAsyncData(() => $fetch('/api/posts', {
+  body: {
+    content: bodyContent.value,
+    question: postData.value.question,
+  },
+  method: 'POST',
+  headers: [['access-token', userToken.value]],
+}))
+
+function handleSubmitPost() {
+  execute()
+  emit('refreshPage')
+}
+
+watch(pending, () => {
+  if (pending.value === false) {
+    input.value = ''
+    postData.value.question = ''
+  }
+})
 </script>
 
 <template>
@@ -17,11 +48,12 @@ watch(mainQuestion, () => mainQuestion.value = mainQuestion.value.replaceAll('\n
         <Tag />
         <Tag tag-name="The Tag" />
       </div>
-      <textarea v-model="mainQuestion" rows="1" placeholder="主要問題" spellcheck="false" class="bg-app-4 text-app-3 placeholder:text-app-3/50 rounded-xl w-full flex items-center py-4 px-4 outline-none resize-none leading-normal" />
+      <textarea v-model="postData.question" rows="1" placeholder="主要問題" spellcheck="false" class="bg-app-4 text-app-3 placeholder:text-app-3/50 rounded-xl w-full flex items-center py-4 px-4 outline-none resize-none leading-normal" />
     </div>
-    <div class="flex items-center justify-center rounded-xl cursor-pointer bg-app-5 text-app-8 py-1 mx-4 mb-4 hover:bg-app-5/75 transition-all duration-300">
-      測風向
+    <div class="w-full flex items-center justify-end">
+      <button class="flex items-center justify-center rounded-xl cursor-pointer bg-app-5 text-app-8 py-1 px-4 mx-4 mb-4 hover:bg-app-5/75 transition-all duration-300" @click="handleSubmitPost">
+        測風向
+      </button>
     </div>
-    <!-- <div v-if="input" v-html="input.replaceAll('\n', '<br>')" /> -->
   </div>
 </template>
