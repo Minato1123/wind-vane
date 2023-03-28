@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { OnClickOutside } from '@vueuse/components'
 import { useUserStore } from '../stores/user'
+import { useLogout } from '~~/composables/api/useLogout'
 
 const emit = defineEmits<{
   (e: 'openLoginDialog'): void
@@ -11,13 +12,10 @@ const { userToken, isLoggedin } = storeToRefs(useUserStore())
 const { userLogout } = useUserStore()
 
 const isOpenLogoutCheckDialog = ref(false)
+const isOpenLogoutFailDialog = ref(false)
 
-const { pending, data, execute: handleLogout } = useLazyAsyncData(() => $fetch('/api/logout', {
-  method: 'POST',
-  headers: [['access-token', userToken.value]],
-}), {
-  immediate: false,
-  server: false,
+const { pending, data, execute: handleLogout } = useLogout({
+  token: userToken.value,
 })
 
 function handleClickLoginBtn() {
@@ -32,8 +30,7 @@ watch(pending, async () => {
     return
 
   if (data.value.success === false)
-  // eslint-disable-next-line no-console
-    console.log('登出失敗！')
+    isOpenLogoutFailDialog.value = true
 
   userLogout()
   isOpenLogoutCheckDialog.value = false
@@ -45,6 +42,9 @@ watch(pending, async () => {
 
 function handleClickOutside() {
   if (isOpenLogoutCheckDialog.value === true)
+    return
+
+  if (isOpenLogoutFailDialog.value === true)
     return
 
   emit('closeMobileMenu')
@@ -123,6 +123,9 @@ function handleClickOutside() {
     </div>
     <DialogWrapper>
       <InfoDialog v-if="isOpenLogoutCheckDialog" info-content="確定要登出嗎？" :only-read="false" @handle-cancel="isOpenLogoutCheckDialog = false" @handle-confirm="handleLogout" />
+    </DialogWrapper>
+    <DialogWrapper>
+      <InfoDialog v-if="isOpenLogoutFailDialog" info-content="登出失敗！再試一次。" :only-read="true" @handle-confirm="isOpenLogoutFailDialog = false" />
     </DialogWrapper>
   </OnClickOutside>
 </template>

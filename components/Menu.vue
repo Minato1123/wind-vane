@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useUserStore } from '../stores/user'
+import { useLogout } from '~~/composables/api/useLogout'
 
 defineEmits<{
   (e: 'openLoginDialog'): void
@@ -10,12 +11,8 @@ const { userLogout } = useUserStore()
 
 const isOpenLogoutCheckDialog = ref(false)
 
-const { pending, data, execute: handleLogout } = useLazyAsyncData(() => $fetch('/api/logout', {
-  method: 'POST',
-  headers: [['access-token', userToken.value]],
-}), {
-  immediate: false,
-  server: false,
+const { pending, data, execute: handleLogout } = useLogout({
+  token: userToken.value,
 })
 
 watch(pending, async () => {

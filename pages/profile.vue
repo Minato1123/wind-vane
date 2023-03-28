@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useUserStore } from '../stores/user'
+import { useUpdateUserEmail } from '~~/composables/api/useUpdateUserEmail'
 
 useHead({
   title: '個人資料｜風向，疑？',
@@ -10,16 +11,10 @@ const { userLogout } = useUserStore()
 const email = ref('')
 const newEmail = ref('')
 
-const { pending, data, execute } = useLazyAsyncData(() => $fetch('/api/users', {
-  headers: [['access-token', userToken.value]],
-  body: {
-    email: email.value,
-    newEmail: newEmail.value,
-  },
-  method: 'PATCH',
-}), {
-  immediate: false,
-  server: false,
+const { pending, data, execute } = useUpdateUserEmail({
+  token: userToken.value,
+  email,
+  newEmail,
 })
 
 const { execute: deleteUser } = useLazyAsyncData(() => $fetch('/api/users', {

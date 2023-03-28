@@ -1,5 +1,18 @@
 <script setup lang="ts">
 import { useUserStore } from '../stores/user'
+import { useGetTagsByPostId } from '~~/composables/api/useGetTagsByPostId'
+import { useGetUserResponseByPostId } from '~~/composables/api/useGetUserResponseByPostId'
+import { useCheckPostSaved } from '~~/composables/api/useCheckPostSaved'
+import { useRespondPositive } from '~~/composables/api/useRsepondPositive'
+import { useRespondNegative } from '~~/composables/api/useRespondNegative'
+import { useChangeResponseToPositive } from '~~/composables/api/useChangeResponseToPositive'
+import { useChangeResponseToNegative } from '~~/composables/api/useChangeResponseToNegative'
+import { useDeleteResponse } from '~~/composables/api/useDeleteResponse'
+import { useGetPostPositiveCount } from '~~/composables/api/useGetPostPositiveCount'
+import { useGetPostNegativeCount } from '~~/composables/api/useGetPostNegativeCount'
+import { useDeletePost } from '~~/composables/api/useDeletePost'
+import { useSavePost } from '~~/composables/api/useSavePost'
+import { useDeleteSavedPost } from '~~/composables/api/useDeleteSavedPost'
 
 const props = defineProps<{
   post: {
@@ -19,11 +32,8 @@ const emit = defineEmits<{
 const { userToken, userId, isLoggedin } = storeToRefs(useUserStore())
 const deletePostCheck = ref(false)
 
-const { pending: tagPending, data: tagData } = useLazyFetch('/api/tags', {
-  query: {
-    postId: props.post.postId,
-  },
-  method: 'GET',
+const { pending: tagPending, data: tagData } = useGetTagsByPostId({
+  postId: props.post.postId,
 })
 
 const postedTime = computed(() => {
@@ -31,23 +41,14 @@ const postedTime = computed(() => {
   return `${time.getFullYear()}/${time.getMonth() + 1}/${time.getDate()} ${time.getHours()}:${time.getMinutes()}`
 })
 
-const { pending: responsePending, data: responseData, execute: responseExecute } = useLazyAsyncData(
-  props.post.postId,
-  () => $fetch(`/api/responses/${props.post.postId}`, {
-    headers: [['access-token', userToken.value]],
-    method: 'GET',
-  }),
-  {
-    server: false,
-    immediate: false,
-  })
+const { pending: responsePending, data: responseData, execute: responseExecute } = useGetUserResponseByPostId({
+  token: userToken.value,
+  postId: props.post.postId,
+})
 
-const { pending: checkSavedPending, data: checkSavedData, execute: checkSavedExecute } = useLazyAsyncData(`chechSaved-${props.post.postId}`, () => $fetch(`/api/savedPosts/${props.post.postId}`, {
-  headers: [['access-token', userToken.value]],
-  method: 'GET',
-}), {
-  server: false,
-  immediate: false,
+const { pending: checkSavedPending, data: checkSavedData, execute: checkSavedExecute } = useCheckPostSaved({
+  token: userToken.value,
+  postId: props.post.postId,
 })
 
 const response = ref<'positive' | 'negative' | null>(null)
@@ -76,65 +77,36 @@ watch(checkSavedPending, () => {
     isSavedPost.value = checkSavedData.value?.data?.isSavedPost ?? null
 })
 
-const { execute: responsePositiveExecute } = useLazyAsyncData(`response-positive-${props.post.postId}`, () => $fetch('/api/responses', {
-  headers: [['access-token', userToken.value]],
-  body: {
-    postId: props.post.postId,
-    response: 'positive',
-  },
-  method: 'POST',
-}), {
-  server: false,
-  immediate: false,
+const { execute: respondPositiveExecute } = useRespondPositive({
+  token: userToken.value,
+  postId: props.post.postId,
 })
 
-const { execute: responseNegativeExecute } = useLazyAsyncData(`response-negative-${props.post.postId}`, () => $fetch('/api/responses', {
-  headers: [['access-token', userToken.value]],
-  body: {
-    postId: props.post.postId,
-    response: 'negative',
-  },
-  method: 'POST',
-}), {
-  server: false,
-  immediate: false,
+const { execute: respondNegativeExecute } = useRespondNegative({
+  token: userToken.value,
+  postId: props.post.postId,
 })
 
-const { execute: changeResponseToPositiveExecute } = useLazyAsyncData(`change-response-to-positive-${props.post.postId}`, () => $fetch(`/api/responses/${props.post.postId}`, {
-  headers: [['access-token', userToken.value]],
-  body: {
-    response: 'positive',
-  },
-  method: 'PATCH',
-}), {
-  server: false,
-  immediate: false,
+const { execute: changeResponseToPositiveExecute } = useChangeResponseToPositive({
+  token: userToken.value,
+  postId: props.post.postId,
 })
 
-const { execute: changeResponseToNegativeExecute } = useLazyAsyncData(`change-response-to-negative-${props.post.postId}`, () => $fetch(`/api/responses/${props.post.postId}`, {
-  headers: [['access-token', userToken.value]],
-  body: {
-    response: 'negative',
-  },
-  method: 'PATCH',
-}), {
-  server: false,
-  immediate: false,
+const { execute: changeResponseToNegativeExecute } = useChangeResponseToNegative({
+  token: userToken.value,
+  postId: props.post.postId,
 })
 
-const { execute: deleteResponseExecute } = useLazyAsyncData(`delete-response-${props.post.postId}`, () => $fetch(`/api/responses/${props.post.postId}`, {
-  headers: [['access-token', userToken.value]],
-  method: 'DELETE',
-}), {
-  server: false,
-  immediate: false,
+const { execute: deleteResponseExecute } = useDeleteResponse({
+  token: userToken.value,
+  postId: props.post.postId,
 })
 
 function handleResponsePositive() {
   if (isLoggedin.value === false)
     return
   if (response.value == null)
-    responsePositiveExecute()
+    respondPositiveExecute()
   else if (response.value === 'positive')
     deleteResponseExecute()
   else
@@ -147,7 +119,7 @@ function handleResponseNegative() {
   if (isLoggedin.value === false)
     return
   if (response.value == null)
-    responseNegativeExecute()
+    respondNegativeExecute()
   else if (response.value === 'negative')
     deleteResponseExecute()
   else
@@ -156,28 +128,19 @@ function handleResponseNegative() {
   responseExecute()
 }
 
-const { data: positiveData } = useLazyFetch(`/api/numOfResponses/${props.post.postId}`, {
-  query: {
-    response: 'positive',
-  },
-  method: 'GET',
-  watch: [response],
+const { data: positiveData } = useGetPostPositiveCount({
+  postId: props.post.postId,
+  response,
 })
 
-const { data: negativeData } = useLazyFetch(`/api/numOfResponses/${props.post.postId}`, {
-  query: {
-    response: 'negative',
-  },
-  method: 'GET',
-  watch: [response],
+const { data: negativeData } = useGetPostNegativeCount({
+  postId: props.post.postId,
+  response,
 })
 
-const { execute: deletePostExecute } = useLazyAsyncData(`delete-post-${props.post.postId}`, () => $fetch(`/api/posts/${props.post.postId}`, {
-  headers: [['access-token', userToken.value]],
-  method: 'DELETE',
-}), {
-  server: false,
-  immediate: false,
+const { execute: deletePostExecute } = useDeletePost({
+  postId: props.post.postId,
+  token: userToken.value,
 })
 
 function handleDeletePost() {
@@ -186,23 +149,14 @@ function handleDeletePost() {
   emit('refreshPage')
 }
 
-const { pending: savePostPending, execute: savePost } = useLazyAsyncData(`save-post-${props.post.postId}`, () => $fetch('/api/savedPosts', {
-  headers: [['access-token', userToken.value]],
-  body: {
-    postId: props.post.postId,
-  },
-  method: 'POST',
-}), {
-  server: false,
-  immediate: false,
+const { pending: savePostPending, execute: savePost } = useSavePost({
+  token: userToken.value,
+  postId: props.post.postId,
 })
 
-const { pending: deleteSavedPostPending, execute: deleteSavedPost } = useLazyAsyncData(`delete-saved-post-${props.post.postId}`, () => $fetch(`/api/savedPosts/${props.post.postId}`, {
-  headers: [['access-token', userToken.value]],
-  method: 'DELETE',
-}), {
-  server: false,
-  immediate: false,
+const { pending: deleteSavedPostPending, execute: deleteSavedPost } = useDeleteSavedPost({
+  token: userToken.value,
+  postId: props.post.postId,
 })
 
 watch([savePostPending, deleteSavedPostPending], () => {

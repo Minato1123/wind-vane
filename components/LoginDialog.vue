@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { OnClickOutside } from '@vueuse/components'
 import { useUserStore } from '../stores/user'
+import { useLogin } from '~~/composables/api/useLogin'
 
 const emit = defineEmits<{
   (e: 'closeLoginDialog'): void
@@ -15,12 +16,8 @@ const userData = ref({
 })
 const isLoginFail = ref(false)
 
-const { pending, data, execute: handleLogin } = useLazyAsyncData(() => $fetch('/api/login', {
-  body: userData.value,
-  method: 'POST',
-}), {
-  immediate: false,
-  server: false,
+const { pending, data, execute: handleLogin } = useLogin({
+  userData,
 })
 
 watch(pending, () => {

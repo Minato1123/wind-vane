@@ -1,8 +1,8 @@
 <script setup lang="ts">
+import { useGetPostByPostId } from '~~/composables/api/useGetPostByPostId'
+
 const route = useRoute()
-const { pending, data } = useLazyFetch(() => `/api/posts/${route.params.postId}`, {
-  method: 'GET',
-})
+const { pending, data } = useGetPostByPostId({ postId: route.params.postId as string })
 </script>
 
 <template>

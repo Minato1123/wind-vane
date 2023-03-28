@@ -1,13 +1,12 @@
 <script setup lang="ts">
 import { useUserStore } from '../stores/user'
+import { useGetPostsByResponse } from '~~/composables/api/useGetPostsByResponse'
 useHead({
   title: '已表態貼文｜風向，疑？',
 })
 const { userToken } = storeToRefs(useUserStore())
-const { pending, data } = useLazyFetch('/api/posts', {
-  headers: [['access-token', userToken.value]],
-  query: { type: 'responsedPost' },
-  method: 'GET',
+const { pending, data } = useGetPostsByResponse({
+  token: userToken.value,
 })
 </script>
 

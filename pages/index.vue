@@ -1,14 +1,12 @@
 <script setup lang="ts">
 import { useUserStore } from '../stores/user'
+import { useGetPosts } from '~~/composables/api/useGetPosts'
 
 useHead({
   title: '首頁｜風向，疑？',
 })
 const { isLoggedin } = storeToRefs(useUserStore())
-
-const { pending, data, refresh } = useLazyFetch('/api/posts', {
-  method: 'GET',
-})
+const { pending, data, refresh } = useGetPosts()
 </script>
 
 <template>

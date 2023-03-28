@@ -1,26 +1,23 @@
 <script setup lang="ts">
 import { useUserStore } from '../stores/user'
+import { useAddPost } from '~~/composables/api/useAddPost'
 const emit = defineEmits<{
   (e: 'refreshPage'): void
 }>()
 const { textarea, input } = useTextareaAutosize()
 const { userToken } = storeToRefs(useUserStore())
 
-const postData = ref({
-  content: input,
-  question: '',
-})
-watch(() => postData.value.question, () => postData.value.question = postData.value.question.replaceAll('\n', ''))
-const bodyContent = computed(() => postData.value.content.replaceAll('\n', '<br />'))
+const content = input
+const question = ref('')
 
-const { pending, execute } = useLazyAsyncData(() => $fetch('/api/posts', {
-  body: {
-    content: bodyContent.value,
-    question: postData.value.question,
-  },
-  method: 'POST',
-  headers: [['access-token', userToken.value]],
-}))
+watch(() => question, () => question.value = question.value.replaceAll('\n', ''))
+const bodyContent = computed(() => content.value.replaceAll('\n', '<br />'))
+
+const { pending, execute } = useAddPost({
+  token: userToken.value,
+  content: bodyContent,
+  question,
+})
 
 function handleSubmitPost() {
   execute()
@@ -30,7 +27,7 @@ function handleSubmitPost() {
 watch(pending, () => {
   if (pending.value === false) {
     input.value = ''
-    postData.value.question = ''
+    question.value = ''
   }
 })
 </script>
@@ -48,7 +45,7 @@ watch(pending, () => {
         <Tag />
         <Tag tag-name="The Tag" />
       </div>
-      <textarea v-model="postData.question" rows="1" placeholder="主要問題" spellcheck="false" class="bg-app-4 text-app-3 placeholder:text-app-3/50 rounded-xl w-full flex items-center py-4 px-4 outline-none resize-none leading-normal" />
+      <textarea v-model="question" rows="1" placeholder="主要問題" spellcheck="false" class="bg-app-4 text-app-3 placeholder:text-app-3/50 rounded-xl w-full flex items-center py-4 px-4 outline-none resize-none leading-normal" />
     </div>
     <div class="w-full flex items-center justify-end">
       <button class="flex items-center justify-center rounded-xl cursor-pointer bg-app-5 text-app-8 py-1 px-4 mx-4 mb-4 hover:bg-app-5/75 transition-all duration-300" @click="handleSubmitPost">

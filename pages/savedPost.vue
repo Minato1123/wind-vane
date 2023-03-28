@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useUserStore } from '../stores/user'
+import { useGetPostsBySave } from '~~/composables/api/useGetPostsBySave'
 
 useHead({
   title: '已儲存貼文｜風向，疑？',
@@ -7,10 +8,8 @@ useHead({
 
 const { userToken } = storeToRefs(useUserStore())
 
-const { pending, data, refresh } = useLazyFetch('/api/posts', {
-  headers: [['access-token', userToken.value]],
-  query: { type: 'savedPost' },
-  method: 'GET',
+const { pending, data, refresh } = useGetPostsBySave({
+  token: userToken.value,
 })
 </script>
 
