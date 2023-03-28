@@ -1,7 +1,14 @@
 import { db } from '../plugins/dataController'
-import { createErrorResponse, createSuccessResponse, generatePostId, getUserId } from '../utils/index'
+import { createErrorResponse, createSuccessResponse, generatePostId } from '../utils/index'
 
 export default defineEventHandler(async (event) => {
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+  if ((event.context.auth.userId) == null) {
+    return createErrorResponse({
+      message: 'Unauthorized',
+    })
+  }
+
   const body = await readBody<{
     content: string | null
     question: string
@@ -14,14 +21,8 @@ export default defineEventHandler(async (event) => {
     newPostId = generatePostId()
   }
 
-  const theToken = event.node.req.headers['access-token'] as string
-  const userId = getUserId(theToken)
-
-  if (userId == null) {
-    return createErrorResponse({
-      message: 'Bad request',
-    })
-  }
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+  const userId = event.context.auth.userId as number
 
   const createdTime = `${Date.now()}`
 

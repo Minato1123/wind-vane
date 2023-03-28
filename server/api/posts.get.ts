@@ -1,28 +1,33 @@
 import { db } from '../plugins/dataController'
-import { createErrorResponse, createSuccessResponse, getUserId } from '../utils/index'
+import { createErrorResponse, createSuccessResponse } from '../utils/index'
 
 export default defineEventHandler((event) => {
-  const theToken = event.node.req.headers['access-token'] as string
-  const userId = getUserId(theToken)
-
   const query = getQuery(event)
 
   const postIdList: string[] = []
 
   if (query.type === 'savedPost') {
-    if (userId == null) {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+    if ((event.context.auth.userId) == null) {
       return createErrorResponse({
-        message: 'Bad request',
+        message: 'Unauthorized',
       })
     }
+
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+    const userId = event.context.auth.userId as number
     postIdList.push(...db.data.saved_posts.filter(u => u.userId === +userId).map(p => p.postId))
   }
   else if (query.type === 'responsedPost') {
-    if (userId == null) {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+    if ((event.context.auth.userId) == null) {
       return createErrorResponse({
-        message: 'Bad request',
+        message: 'Unauthorized',
       })
     }
+
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+    const userId = event.context.auth.userId as number
     postIdList.push(...db.data.responses.filter(u => u.userId === +userId).map(p => p.postId))
   }
   else if (query.type === 'tagsPost') {

@@ -1,16 +1,17 @@
 import { db } from '../../plugins/dataController'
-import { createErrorResponse, createSuccessResponse, getUserId } from '../../utils/index'
+import { createErrorResponse, createSuccessResponse } from '../../utils/index'
 
 export default defineEventHandler((event) => {
-  const { postId } = event.context.params!
-  const theToken = event.node.req.headers['access-token'] as string
-  const userId = getUserId(theToken)
-
-  if (userId == null) {
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+  if ((event.context.auth.userId) == null) {
     return createErrorResponse({
-      message: 'Bad request',
+      message: 'Unauthorized',
     })
   }
+
+  const { postId } = event.context.params!
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+  const userId = event.context.auth.userId as number
 
   const responsedIndex = db.data.responses.findIndex(p => p.postId === postId && p.userId === userId)
 

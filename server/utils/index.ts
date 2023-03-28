@@ -1,5 +1,3 @@
-import { tokenMap } from '../tokenMap'
-
 export function createSuccessResponse<T>(data: T) {
   return {
     data,
@@ -20,8 +18,4 @@ export function createErrorResponse(error: {
 
 export function generatePostId() {
   return Math.floor(Math.random() * 1000000).toString().padStart(6, '0')
-}
-
-export function getUserId(theToken: string) {
-  return tokenMap.get(theToken)
 }
