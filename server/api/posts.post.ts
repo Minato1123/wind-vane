@@ -35,5 +35,5 @@ export default defineEventHandler(async (event) => {
     deleted: false,
   })
 
-  return createSuccessResponse(null)
+  return createSuccessResponse({ postId: newPostId })
 })

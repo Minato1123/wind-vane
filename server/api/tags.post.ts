@@ -10,22 +10,25 @@ export default defineEventHandler(async (event) => {
   }
 
   const body = await readBody<{
-    name: string
+    tags: string[]
   }>(event)
 
-  const tag = db.data.tags.find(t => t.name === body.name)
-  if (tag != null) {
-    return createErrorResponse({
-      message: 'Duplicated',
+  let newTagId = db.data.tags[db.data.tags.length - 1]?.id ?? 0
+  const tagIdList: number[] = []
+
+  body.tags.forEach((tag) => {
+    const existedTag = db.data.tags.find(t => t.name === tag)
+    if (existedTag != null)
+      return
+
+    tagIdList.push(++newTagId)
+    db.data.tags.push({
+      id: newTagId,
+      name: tag,
     })
-  }
-
-  const newTagId = db.data.tags[db.data.tags.length - 1]?.id ?? 0
-
-  db.data.tags.push({
-    id: newTagId + 1,
-    name: body.name,
   })
 
-  return createSuccessResponse(null)
+  return createSuccessResponse({
+    tagIdList,
+  })
 })
