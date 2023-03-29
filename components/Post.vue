@@ -30,7 +30,8 @@ const emit = defineEmits<{
 }>()
 
 const { userToken, userId, isLoggedin } = storeToRefs(useUserStore())
-const deletePostCheck = ref(false)
+const isOpenDeletePostCheckDialog = ref(false)
+const isOpenReportDialog = ref(false)
 
 const { pending: tagPending, data: tagData } = useGetTagsByPostId({
   postId: props.post.postId,
@@ -147,7 +148,7 @@ const { execute: deletePostExecute } = useDeletePost({
 
 function handleDeletePost() {
   deletePostExecute()
-  deletePostCheck.value = false
+  isOpenDeletePostCheckDialog.value = false
   emit('refreshPage')
 }
 
@@ -217,10 +218,10 @@ function handlePostNavigate() {
               <button v-if="isLoggedin && isSavedPost === true" class="w-full px-4 py-2 hover:bg-app-4/30 hover:rounded-lg transition-all duration-300" @click="deleteSavedPost()">
                 取消儲存
               </button>
-              <button v-if="userId === post.userId" class="w-full px-4 py-2 hover:bg-app-4/30 hover:rounded-lg transition-all duration-300" @click="deletePostCheck = true">
+              <button v-if="userId === post.userId" class="w-full px-4 py-2 hover:bg-app-4/30 hover:rounded-lg transition-all duration-300" @click="isOpenDeletePostCheckDialog = true">
                 刪除貼文
               </button>
-              <button v-if="userId !== post.userId" class="w-full px-4 py-2 hover:bg-app-4/30 hover:rounded-lg transition-all duration-300">
+              <button v-if="userId !== post.userId" class="w-full px-4 py-2 hover:bg-app-4/30 hover:rounded-lg transition-all duration-300" @click="isOpenReportDialog = true">
                 檢舉
               </button>
             </div>
@@ -268,7 +269,10 @@ function handlePostNavigate() {
       </div>
     </div>
     <DialogWrapper>
-      <InfoDialog v-if="deletePostCheck" info-content="確定刪除此篇貼文？" :only-read="false" @handle-cancel="deletePostCheck = false" @handle-confirm="handleDeletePost" />
+      <InfoDialog v-if="isOpenDeletePostCheckDialog" info-content="確定刪除此篇貼文？" :only-read="false" @handle-cancel="isOpenDeletePostCheckDialog = false" @handle-confirm="handleDeletePost" />
+    </DialogWrapper>
+    <DialogWrapper>
+      <InfoDialog v-if="isOpenReportDialog" info-content="確定檢舉此篇貼文？" :only-read="false" @handle-cancel="isOpenReportDialog = false" @handle-confirm="isOpenReportDialog = false" />
     </DialogWrapper>
   </div>
 </template>
