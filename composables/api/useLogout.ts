@@ -8,7 +8,7 @@ export function useLogout({
   return useLazyAsyncData(
     'logout',
     () => $fetch('/api/logout', {
-      method: 'POST',
+      method: 'post',
       headers: [['access-token', unref(token)]],
     }), {
       immediate: false,

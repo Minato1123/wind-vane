@@ -10,7 +10,7 @@ export function useLogin({
 }) {
   return useLazyAsyncData(() => $fetch('/api/login', {
     body: unref(userData),
-    method: 'POST',
+    method: 'post',
   }), {
     immediate: false,
     server: false,

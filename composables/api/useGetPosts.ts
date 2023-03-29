@@ -1,5 +1,5 @@
 export function useGetPosts() {
-  return useLazyFetch('/api/posts', {
-    method: 'GET',
+  return useFetch('/api/posts', {
+    method: 'get',
   })
 }

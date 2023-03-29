@@ -13,7 +13,7 @@ export function useRespondNegative({
       postId,
       response: 'negative',
     },
-    method: 'POST',
+    method: 'post',
   }), {
     server: false,
     immediate: false,

@@ -15,7 +15,7 @@ export function useRespondPositive({
         postId,
         response: 'positive',
       },
-      method: 'POST',
+      method: 'post',
     }), {
       server: false,
       immediate: false,

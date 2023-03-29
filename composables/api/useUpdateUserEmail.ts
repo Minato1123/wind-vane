@@ -15,7 +15,7 @@ export function useUpdateUserEmail({
       email: unref(email),
       newEmail: unref(newEmail),
     },
-    method: 'PATCH',
+    method: 'patch',
   }), {
     immediate: false,
     server: false,

@@ -3,7 +3,7 @@ export function useGetPostByPostId({
 }: {
   postId: string
 }) {
-  return useLazyFetch(() => `/api/posts/${postId}`, {
-    method: 'GET',
+  return useFetch(() => `/api/posts/${postId}`, {
+    method: 'get',
   })
 }

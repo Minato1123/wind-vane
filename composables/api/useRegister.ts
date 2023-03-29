@@ -14,7 +14,7 @@ export function useRegister({
         email: unref(email),
         password: unref(password),
       },
-      method: 'POST',
+      method: 'post',
     }), {
       server: false,
       immediate: false,

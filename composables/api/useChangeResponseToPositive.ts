@@ -14,7 +14,7 @@ export function useChangeResponseToPositive({
       body: {
         response: 'positive',
       },
-      method: 'PATCH',
+      method: 'patch',
     }), {
       server: false,
       immediate: false,

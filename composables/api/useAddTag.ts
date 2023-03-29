@@ -14,7 +14,7 @@ export function useAddTag({
       body: {
         tags: unref(tags),
       },
-      method: 'POST',
+      method: 'post',
     }), {
       immediate: false,
       server: false,

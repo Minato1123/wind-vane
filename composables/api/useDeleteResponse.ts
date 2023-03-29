@@ -11,7 +11,7 @@ export function useDeleteResponse({
     `delete-response-${postId}`,
     () => $fetch(`/api/responses/${postId}`, {
       headers: [['access-token', unref(token)]],
-      method: 'DELETE',
+      method: 'delete',
     }), {
       server: false,
       immediate: false,

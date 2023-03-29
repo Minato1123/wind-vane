@@ -8,6 +8,6 @@ export function useGetPostsByResponse({
   return useLazyFetch('/api/posts', {
     headers: [['access-token', unref(token)]],
     query: { type: 'responsedPost' },
-    method: 'GET',
+    method: 'get',
   })
 }

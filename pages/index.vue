@@ -6,7 +6,7 @@ useHead({
   title: '首頁｜風向，疑？',
 })
 const { isLoggedin } = storeToRefs(useUserStore())
-const { pending, data, refresh } = useGetPosts()
+const { pending, data, refresh } = await useGetPosts()
 </script>
 
 <template>

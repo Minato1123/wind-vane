@@ -9,7 +9,7 @@ export function useGetPostPositiveCount({
     query: {
       response: 'positive',
     },
-    method: 'GET',
+    method: 'get',
     watch: [response],
   })
 }

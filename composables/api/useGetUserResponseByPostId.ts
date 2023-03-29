@@ -10,7 +10,7 @@ export function useGetUserResponseByPostId({
     `user-response-by-${postId}`,
     () => $fetch(`/api/responses/${postId}`, {
       headers: [['access-token', unref(token)]],
-      method: 'GET',
+      method: 'get',
     }),
     {
       server: false,

@@ -11,7 +11,7 @@ export function useDeleteSavedPost({
     `delete-saved-post-${postId}`,
     () => $fetch(`/api/savedPosts/${postId}`, {
       headers: [['access-token', unref(token)]],
-      method: 'DELETE',
+      method: 'delete',
     }), {
       server: false,
       immediate: false,

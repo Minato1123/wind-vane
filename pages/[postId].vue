@@ -2,7 +2,7 @@
 import { useGetPostByPostId } from '~~/composables/api/useGetPostByPostId'
 
 const route = useRoute()
-const { pending, data } = useGetPostByPostId({ postId: route.params.postId as string })
+const { pending, data } = await useGetPostByPostId({ postId: route.params.postId as string })
 </script>
 
 <template>

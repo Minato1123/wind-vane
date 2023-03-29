@@ -17,7 +17,7 @@ export function useAddTagsInPost({
         tagIdList: unref(tagIdList),
         postId: unref(postId),
       },
-      method: 'POST',
+      method: 'post',
     }), {
       server: false,
       immediate: false,

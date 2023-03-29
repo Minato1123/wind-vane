@@ -10,7 +10,7 @@ export function useCheckPostSaved({
     `check-${postId}-saved`,
     () => $fetch(`/api/savedPosts/${postId}`, {
       headers: [['access-token', unref(token)]],
-      method: 'GET',
+      method: 'get',
     }), {
       server: false,
       immediate: false,

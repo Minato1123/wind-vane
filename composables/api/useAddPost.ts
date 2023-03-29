@@ -14,7 +14,7 @@ export function useAddPost({
       content: unref(content),
       question: unref(question),
     },
-    method: 'POST',
+    method: 'post',
     headers: [['access-token', unref(token)]],
   }))
 }

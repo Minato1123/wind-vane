@@ -7,6 +7,6 @@ export function useGetTagsByPostId({
     query: {
       postId,
     },
-    method: 'GET',
+    method: 'get',
   })
 }

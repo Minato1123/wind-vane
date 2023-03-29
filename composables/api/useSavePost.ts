@@ -14,7 +14,7 @@ export function useSavePost({
       body: {
         postId,
       },
-      method: 'POST',
+      method: 'post',
     }), {
       server: false,
       immediate: false,

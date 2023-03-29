@@ -1,13 +1,12 @@
 import type { MaybeRef } from '@vueuse/core'
 
-export function useGetPostsBySave({
+export function useGetTokenValid({
   token,
 }: {
   token: MaybeRef<string>
 }) {
-  return useLazyFetch('/api/posts', {
+  return useFetch('/api/tokenValid', {
     headers: [['access-token', unref(token)]],
-    query: { type: 'savedPost' },
     method: 'get',
   })
 }
