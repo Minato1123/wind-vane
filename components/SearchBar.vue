@@ -2,6 +2,9 @@
 const searchString = ref<string>('')
 
 function handleSearch() {
+  if (searchString.value.trim() === '')
+    return
+
   navigateTo({
     name: 'tags',
     query: {
