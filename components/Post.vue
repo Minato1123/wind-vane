@@ -32,6 +32,7 @@ const emit = defineEmits<{
 const { userToken, userId, isLoggedin } = storeToRefs(useUserStore())
 const isOpenDeletePostCheckDialog = ref(false)
 const isOpenReportDialog = ref(false)
+const isOpenWarnLoginDialog = ref(false)
 
 const { pending: tagPending, data: tagData } = useGetTagsByPostId({
   postId: props.post.postId,
@@ -106,8 +107,11 @@ const { execute: deleteResponseExecute } = useDeleteResponse({
 })
 
 function handleResponsePositive() {
-  if (isLoggedin.value === false)
+  if (isLoggedin.value === false) {
+    isOpenWarnLoginDialog.value = true
     return
+  }
+
   if (response.value == null)
     respondPositiveExecute()
   else if (response.value === 'positive')
@@ -119,8 +123,11 @@ function handleResponsePositive() {
 }
 
 function handleResponseNegative() {
-  if (isLoggedin.value === false)
+  if (isLoggedin.value === false) {
+    isOpenWarnLoginDialog.value = true
     return
+  }
+
   if (response.value == null)
     respondNegativeExecute()
   else if (response.value === 'negative')
@@ -273,6 +280,9 @@ function handlePostNavigate() {
     </DialogWrapper>
     <DialogWrapper>
       <InfoDialog v-if="isOpenReportDialog" info-content="確定檢舉此篇貼文？" :only-read="false" @handle-cancel="isOpenReportDialog = false" @handle-confirm="isOpenReportDialog = false" />
+    </DialogWrapper>
+    <DialogWrapper>
+      <InfoDialog v-if="isOpenWarnLoginDialog" info-content="請先登入再進行操作喔！" :only-read="true" @handle-confirm="isOpenWarnLoginDialog = false" />
     </DialogWrapper>
   </div>
 </template>

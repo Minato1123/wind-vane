@@ -20,7 +20,7 @@ const { pending, data } = useGetPostsByResponse({
     <div v-if="pending || data?.data == null || data.data.length === 0" class="text-app-4/50 text-xl my-auto">
       目前還沒有對任何貼文表態過呢！
     </div>
-    <div v-else class="flex flex-col items-center gap-8">
+    <div v-else class="w-full sm:w-[40rem] flex flex-col items-center gap-8">
       <Post
         v-for="post in data?.data" :key="post.id" :post="{
           postId: post.id,
