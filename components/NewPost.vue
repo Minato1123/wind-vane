@@ -49,6 +49,9 @@ const { pending: addTagsInPostPending, execute: handleAddTagInPost } = useAddTag
 })
 
 function handleSubmitPost() {
+  if (question.value.trim() === '')
+    return
+
   execute()
   handleAddTag()
 }

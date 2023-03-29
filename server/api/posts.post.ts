@@ -14,6 +14,12 @@ export default defineEventHandler(async (event) => {
     question: string
   }>(event)
 
+  if (body.question.trim() === '') {
+    return createErrorResponse({
+      message: 'Bad request',
+    })
+  }
+
   let newPostId = generatePostId()
   while (true) {
     if (db.data.posts.map(p => p.id).includes(newPostId) === false)
