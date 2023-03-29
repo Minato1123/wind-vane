@@ -3,6 +3,8 @@ import { createErrorResponse, createSuccessResponse } from '../utils/index'
 
 export default defineEventHandler((event) => {
   const query = getQuery(event)
+  const start = +String(query.partNumber)
+  const num = +String(query.postPerPart)
 
   const postIdList: string[] = []
 
@@ -52,7 +54,7 @@ export default defineEventHandler((event) => {
     postIdList.push(...db.data.posts.map(p => p.id))
   }
 
-  const posts = db.data.posts.filter(p => postIdList.includes(p.id) && p.deleted === false).reverse()
+  const posts = db.data.posts.filter(p => postIdList.includes(p.id) && p.deleted === false).reverse().splice(start, start + num)
 
   return createSuccessResponse(posts)
 })

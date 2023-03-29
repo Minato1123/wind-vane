@@ -191,7 +191,7 @@ function handlePostNavigate() {
 </script>
 
 <template>
-  <div class="w-full sm:w-[40rem] bg-app-3 sm:rounded-xl">
+  <div class="w-full sm:w-[40rem] bg-app-3 sm:rounded-xl min-h-[20rem]">
     <div class="bg-app-2 sm:rounded-tl-xl sm:rounded-tr-xl w-full h-10 flex items-center justify-between">
       <div class="sm:rounded-tl-xl sm:rounded-tr-xl sm:w-1/6 w-1/3 h-full bg-app-3 text-app-4 hover:text-app-4/50 transition-all duration-300 cursor-pointer tracking-wider text-lg flex justify-center items-center" @click="handlePostNavigate">
         {{ post.postId }}
