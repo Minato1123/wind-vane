@@ -58,6 +58,14 @@ watch(pending, async () => {
         首頁
       </NuxtLink>
       <NuxtLink
+        class="hover:text-app-8 transition-all duration-200 mx-auto"
+        :to="{
+          name: 'myPost',
+        }"
+      >
+        我的貼文
+      </NuxtLink>
+      <NuxtLink
         class="hover:text-app-8 transition-all duration-200"
         :to="{
           name: 'responsedPost',

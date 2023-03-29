@@ -82,6 +82,15 @@ function handleClickOutside() {
       </NuxtLink>
       <NuxtLink
         :to="{
+          name: 'myPost',
+        }"
+        class="hover:text-app-8/80 transition-all duration-300"
+        @click="$emit('closeMobileMenu')"
+      >
+        我的貼文
+      </NuxtLink>
+      <NuxtLink
+        :to="{
           name: 'responsedPost',
         }"
         class="hover:text-app-8/80 transition-all duration-300"

@@ -16,7 +16,7 @@ export default defineEventHandler((event) => {
 
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     const userId = event.context.auth.userId as number
-    postIdList.push(...db.data.saved_posts.filter(u => u.userId === +userId).map(p => p.postId))
+    postIdList.push(...db.data.saved_posts.filter(u => u.userId === userId).map(p => p.postId))
   }
   else if (query.type === 'responsedPost') {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
@@ -28,7 +28,19 @@ export default defineEventHandler((event) => {
 
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     const userId = event.context.auth.userId as number
-    postIdList.push(...db.data.responses.filter(u => u.userId === +userId).map(p => p.postId))
+    postIdList.push(...db.data.responses.filter(u => u.userId === userId).map(p => p.postId))
+  }
+  else if (query.type === 'myPost') {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+    if ((event.context.auth.userId) == null) {
+      return createErrorResponse({
+        message: 'Unauthorized',
+      })
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+    const userId = event.context.auth.userId as number
+    postIdList.push(...db.data.posts.filter(a => a.userId === userId).map(p => p.id))
   }
   else if (query.type === 'tagsPost') {
     const tags = String(query.tags)
