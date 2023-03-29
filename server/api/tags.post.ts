@@ -18,8 +18,10 @@ export default defineEventHandler(async (event) => {
 
   body.tags.forEach((tag) => {
     const existedTag = db.data.tags.find(t => t.name === tag)
-    if (existedTag != null)
+    if (existedTag != null) {
+      tagIdList.push(existedTag.id)
       return
+    }
 
     tagIdList.push(++newTagId)
     db.data.tags.push({
