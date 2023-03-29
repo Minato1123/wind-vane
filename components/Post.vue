@@ -165,6 +165,15 @@ watch([savePostPending, deleteSavedPostPending], () => {
     emit('refreshSavedPage')
   }
 })
+
+function handleNavigate(tag: string) {
+  navigateTo({
+    name: 'tags',
+    query: {
+      tags: tag,
+    },
+  })
+}
 </script>
 
 <template>
@@ -216,7 +225,7 @@ watch([savePostPending, deleteSavedPostPending], () => {
     <div class="p-4 w-full">
       <div class="text-app-4 pb-4 min-h-[4rem]" v-html="post.content" />
       <div v-if="tagData && !tagPending" class="text-app-8/50 text-sm pb-2 flex items-center gap-2">
-        <div v-for="tag in tagData.data" :key="`tag-${tag.id}`" class="cursor-pointer hover:text-app-8/70 transition-all duration-300">
+        <div v-for="tag in tagData.data" :key="`tag-${tag.id}`" class="cursor-pointer hover:text-app-8/70 transition-all duration-300" @click="handleNavigate(tag.name)">
           #{{ tag.name }}
         </div>
       </div>

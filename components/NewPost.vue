@@ -10,7 +10,14 @@ const emit = defineEmits<{
 const { textarea, input } = useTextareaAutosize()
 const { userToken } = storeToRefs(useUserStore())
 
-const theInput = ref()
+const inputRef = ref<HTMLInputElement | null>(null)
+
+watch(inputRef, () => {
+  if (inputRef.value == null)
+    return
+
+  inputRef.value.focus()
+})
 
 const content = input
 const question = ref('')
@@ -110,7 +117,7 @@ function addTag(e: KeyboardEvent) {
       <div class="pb-2 flex items-center gap-2">
         <OnClickOutside v-if="isInputingTag" @trigger="isInputingTag = false">
           <div class="py-[0.2rem] px-[0.7rem] text-sm text-app-4 bg-app-1 rounded-full flex items-center justify-between">
-            <input ref="theInput" v-model="inputTag" name="tag-input" class="bg-app-1 outline-none" @keyup.enter="addTag">
+            <input ref="inputRef" v-model="inputTag" name="tag-input" class="bg-app-1 outline-none" @keydown.enter="addTag">
             <Icon name="ic:outline-new-label" size="1.2rem" class="cursor-pointer hover:text-app-4/50 transition-all duration-200" @click="addTag" />
           </div>
         </OnClickOutside>

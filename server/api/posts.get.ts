@@ -31,8 +31,8 @@ export default defineEventHandler((event) => {
     postIdList.push(...db.data.responses.filter(u => u.userId === +userId).map(p => p.postId))
   }
   else if (query.type === 'tagsPost') {
-    const tags = query.tags?.toString()
-    const tagList = tags?.split(',').map(m => db.data.tags.find(t => t.name === m)?.id)
+    const tags = String(query.tags)
+    const tagList = tags?.split(' ').map(m => db.data.tags.find(t => t.name === m)?.id)
 
     postIdList.push(...db.data.tags_posts_association.filter(t => tagList?.includes(t.tagId)).map(p => p.postId))
   }
