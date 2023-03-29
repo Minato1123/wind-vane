@@ -168,7 +168,7 @@ watch([savePostPending, deleteSavedPostPending], () => {
   }
 })
 
-function handleNavigate(tag: string) {
+function handleTagNavigate(tag: string) {
   navigateTo({
     name: 'tags',
     query: {
@@ -176,12 +176,16 @@ function handleNavigate(tag: string) {
     },
   })
 }
+
+function handlePostNavigate() {
+  navigateTo(`/${props.post.postId}`)
+}
 </script>
 
 <template>
   <div class="w-full sm:w-[40rem] bg-app-3 sm:rounded-xl">
     <div class="bg-app-2 sm:rounded-tl-xl sm:rounded-tr-xl w-full h-10 flex items-center justify-between">
-      <div class="sm:rounded-tl-xl sm:rounded-tr-xl sm:w-1/6 w-1/3 h-full bg-app-3 text-app-4 tracking-wider text-lg flex justify-center items-center">
+      <div class="sm:rounded-tl-xl sm:rounded-tr-xl sm:w-1/6 w-1/3 h-full bg-app-3 text-app-4 hover:text-app-4/50 transition-all duration-300 cursor-pointer tracking-wider text-lg flex justify-center items-center" @click="handlePostNavigate">
         {{ post.postId }}
       </div>
       <div class="text-app-4 text-xs">
@@ -227,7 +231,7 @@ function handleNavigate(tag: string) {
     <div class="p-4 w-full">
       <div class="text-app-4 pb-4 min-h-[4rem]" v-html="post.content" />
       <div v-if="tagData && !tagPending" class="text-app-8/50 text-sm pb-2 flex items-center gap-2">
-        <div v-for="tag in tagData.data" :key="`tag-${tag.id}`" class="cursor-pointer hover:text-app-8/70 transition-all duration-300" @click="handleNavigate(tag.name)">
+        <div v-for="tag in tagData.data" :key="`tag-${tag.id}`" class="cursor-pointer hover:text-app-8/70 transition-all duration-300" @click="handleTagNavigate(tag.name)">
           #{{ tag.name }}
         </div>
       </div>

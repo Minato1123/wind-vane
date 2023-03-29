@@ -61,8 +61,7 @@ watch(pending, () => {
     return
 
   if (data.value?.success === false)
-    // eslint-disable-next-line no-console
-    console.log('發文失敗')
+    return
 
   input.value = ''
   question.value = ''
