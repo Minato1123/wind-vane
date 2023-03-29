@@ -6,6 +6,10 @@ useHead({
   title: '個人資料｜風向，疑？',
 })
 
+definePageMeta({
+  middleware: 'auth',
+})
+
 const { userToken } = storeToRefs(useUserStore())
 const { userLogout } = useUserStore()
 const email = ref('')

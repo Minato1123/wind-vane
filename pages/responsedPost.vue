@@ -4,6 +4,11 @@ import { useGetPostsByResponse } from '~~/composables/api/useGetPostsByResponse'
 useHead({
   title: '已表態貼文｜風向，疑？',
 })
+
+definePageMeta({
+  middleware: 'auth',
+})
+
 const { userToken } = storeToRefs(useUserStore())
 const { pending, data } = useGetPostsByResponse({
   token: userToken,

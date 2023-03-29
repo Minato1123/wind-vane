@@ -6,6 +6,10 @@ useHead({
   title: '已儲存貼文｜風向，疑？',
 })
 
+definePageMeta({
+  middleware: 'auth',
+})
+
 const { userToken } = storeToRefs(useUserStore())
 
 const { pending, data, refresh } = useGetPostsBySave({
