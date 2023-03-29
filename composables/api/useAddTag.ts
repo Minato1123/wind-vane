@@ -4,13 +4,13 @@ export function useAddTag({
   token,
   tags,
 }: {
-  token: string
+  token: MaybeRef<string>
   tags: MaybeRef<string[]>
 }) {
   return useLazyAsyncData(
     `add-tag-${Date.now()}`,
     () => $fetch('/api/tags', {
-      headers: [['access-token', token]],
+      headers: [['access-token', unref(token)]],
       body: {
         tags: unref(tags),
       },

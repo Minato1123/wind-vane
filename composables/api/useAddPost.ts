@@ -5,7 +5,7 @@ export function useAddPost({
   content,
   question,
 }: {
-  token: string
+  token: MaybeRef<string>
   content: MaybeRef<string>
   question: MaybeRef<string>
 }) {
@@ -15,6 +15,6 @@ export function useAddPost({
       question: unref(question),
     },
     method: 'POST',
-    headers: [['access-token', token]],
+    headers: [['access-token', unref(token)]],
   }))
 }

@@ -1,13 +1,17 @@
+import type { MaybeRef } from '@vueuse/core'
+
 export function useLogout({
   token,
 }: {
-  token: string
+  token: MaybeRef<string>
 }) {
-  return useLazyAsyncData(() => $fetch('/api/logout', {
-    method: 'POST',
-    headers: [['access-token', token]],
-  }), {
-    immediate: false,
-    server: false,
-  })
+  return useLazyAsyncData(
+    'logout',
+    () => $fetch('/api/logout', {
+      method: 'POST',
+      headers: [['access-token', unref(token)]],
+    }), {
+      immediate: false,
+      server: false,
+    })
 }

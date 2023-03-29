@@ -5,14 +5,14 @@ export function useAddTagsInPost({
   tagIdList,
   postId,
 }: {
-  token: string
+  token: MaybeRef<string>
   tagIdList: MaybeRef<number[]>
   postId: MaybeRef<string>
 }) {
   return useLazyAsyncData(
     `add-tag-in-${unref(postId)}`,
     () => $fetch('/api/tagsInPosts', {
-      headers: [['access-token', token]],
+      headers: [['access-token', unref(token)]],
       body: {
         tagIdList: unref(tagIdList),
         postId: unref(postId),

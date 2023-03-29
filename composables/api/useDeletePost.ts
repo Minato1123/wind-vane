@@ -1,14 +1,16 @@
+import type { MaybeRef } from '@vueuse/core'
+
 export function useDeletePost({
   token,
   postId,
 }: {
-  token: string
+  token: MaybeRef<string>
   postId: string
 }) {
   return useLazyAsyncData(
     `delete-post-${postId}`,
     () => $fetch(`/api/posts/${postId}`, {
-      headers: [['access-token', token]],
+      headers: [['access-token', unref(token)]],
       method: 'DELETE',
     }), {
       server: false,

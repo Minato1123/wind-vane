@@ -9,7 +9,7 @@ useHead({
 const { userToken } = storeToRefs(useUserStore())
 
 const { pending, data, refresh } = useGetPostsBySave({
-  token: userToken.value,
+  token: userToken,
 })
 </script>
 

@@ -6,11 +6,13 @@ export function useGetPostsByTags({
   tags: MaybeRef<string>
 }) {
   return useLazyFetch(
-    () => '/api/posts/', {
+    () => '/api/posts/',
+    {
       query: {
         type: 'tagsPost',
         tags: computed(() => unref(tags)),
       },
       method: 'GET',
-    })
+    },
+  )
 }

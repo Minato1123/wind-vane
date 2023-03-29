@@ -15,7 +15,7 @@ const isOpenLogoutCheckDialog = ref(false)
 const isOpenLogoutFailDialog = ref(false)
 
 const { pending, data, execute: handleLogout } = useLogout({
-  token: userToken.value,
+  token: userToken,
 })
 
 function handleClickLoginBtn() {

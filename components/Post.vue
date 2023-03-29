@@ -42,12 +42,12 @@ const postedTime = computed(() => {
 })
 
 const { pending: responsePending, data: responseData, execute: responseExecute } = useGetUserResponseByPostId({
-  token: userToken.value,
+  token: userToken,
   postId: props.post.postId,
 })
 
 const { pending: checkSavedPending, data: checkSavedData, execute: checkSavedExecute } = useCheckPostSaved({
-  token: userToken.value,
+  token: userToken,
   postId: props.post.postId,
 })
 
@@ -68,8 +68,10 @@ watch(isLoggedin, () => {
 })
 
 watch(responsePending, () => {
-  if (responsePending.value === false)
-    response.value = responseData.value?.data?.response ?? null
+  if (responsePending.value === true)
+    return
+
+  response.value = responseData.value?.data?.response ?? null
 })
 
 watch(checkSavedPending, () => {
@@ -78,22 +80,22 @@ watch(checkSavedPending, () => {
 })
 
 const { execute: respondPositiveExecute } = useRespondPositive({
-  token: userToken.value,
+  token: userToken,
   postId: props.post.postId,
 })
 
 const { execute: respondNegativeExecute } = useRespondNegative({
-  token: userToken.value,
+  token: userToken,
   postId: props.post.postId,
 })
 
 const { execute: changeResponseToPositiveExecute } = useChangeResponseToPositive({
-  token: userToken.value,
+  token: userToken,
   postId: props.post.postId,
 })
 
 const { execute: changeResponseToNegativeExecute } = useChangeResponseToNegative({
-  token: userToken.value,
+  token: userToken,
   postId: props.post.postId,
 })
 
@@ -140,7 +142,7 @@ const { data: negativeData } = useGetPostNegativeCount({
 
 const { execute: deletePostExecute } = useDeletePost({
   postId: props.post.postId,
-  token: userToken.value,
+  token: userToken,
 })
 
 function handleDeletePost() {
@@ -150,12 +152,12 @@ function handleDeletePost() {
 }
 
 const { pending: savePostPending, execute: savePost } = useSavePost({
-  token: userToken.value,
+  token: userToken,
   postId: props.post.postId,
 })
 
 const { pending: deleteSavedPostPending, execute: deleteSavedPost } = useDeleteSavedPost({
-  token: userToken.value,
+  token: userToken,
   postId: props.post.postId,
 })
 

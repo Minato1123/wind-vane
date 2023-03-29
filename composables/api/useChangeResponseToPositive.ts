@@ -1,14 +1,16 @@
+import type { MaybeRef } from '@vueuse/core'
+
 export function useChangeResponseToPositive({
   token,
   postId,
 }: {
-  token: string
+  token: MaybeRef<string>
   postId: string
 }) {
   return useLazyAsyncData(
     `change-response-to-positive-${postId}`,
     () => $fetch(`/api/responses/${postId}`, {
-      headers: [['access-token', token]],
+      headers: [['access-token', unref(token)]],
       body: {
         response: 'positive',
       },

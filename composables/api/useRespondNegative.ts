@@ -1,12 +1,14 @@
+import type { MaybeRef } from '@vueuse/core'
+
 export function useRespondNegative({
   token,
   postId,
 }: {
-  token: string
+  token: MaybeRef<string>
   postId: string
 }) {
   return useLazyAsyncData(`respond-negative-${postId}`, () => $fetch('/api/responses', {
-    headers: [['access-token', token]],
+    headers: [['access-token', unref(token)]],
     body: {
       postId,
       response: 'negative',

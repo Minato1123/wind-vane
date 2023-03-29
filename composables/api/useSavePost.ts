@@ -1,14 +1,16 @@
+import type { MaybeRef } from '@vueuse/core'
+
 export function useSavePost({
   token,
   postId,
 }: {
-  token: string
+  token: MaybeRef<string>
   postId: string
 }) {
   return useLazyAsyncData(
     `save-post-${postId}`,
     () => $fetch('/api/savedPosts', {
-      headers: [['access-token', token]],
+      headers: [['access-token', unref(token)]],
       body: {
         postId,
       },

@@ -3,7 +3,7 @@ import { createErrorResponse, createSuccessResponse } from '../../utils/index'
 
 export default defineEventHandler(async (event) => {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-  if ((event.context.auth.userId) == null) {
+  if (event.context.auth.userId == null) {
     return createErrorResponse({
       message: 'Unauthorized',
     })

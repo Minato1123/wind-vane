@@ -6,7 +6,7 @@ useHead({
 })
 const { userToken } = storeToRefs(useUserStore())
 const { pending, data } = useGetPostsByResponse({
-  token: userToken.value,
+  token: userToken,
 })
 </script>
 

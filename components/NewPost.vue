@@ -29,13 +29,13 @@ watch(() => question, () => question.value = question.value.replaceAll('\n', '')
 const bodyContent = computed(() => content.value.replaceAll('\n', '<br />'))
 
 const { pending, data, execute } = useAddPost({
-  token: userToken.value,
+  token: userToken,
   content: bodyContent,
   question,
 })
 
 const { pending: addTagsPending, data: tagIdListData, execute: handleAddTag } = useAddTag({
-  token: userToken.value,
+  token: userToken,
   tags: tagList,
 })
 
@@ -43,7 +43,7 @@ const tagIdList = ref<number[]>([])
 const postId = ref<string>('')
 
 const { pending: addTagsInPostPending, execute: handleAddTagInPost } = useAddTagsInPost({
-  token: userToken.value,
+  token: userToken,
   tagIdList,
   postId,
 })
