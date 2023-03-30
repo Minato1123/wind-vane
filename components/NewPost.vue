@@ -105,6 +105,11 @@ function addTag(e: KeyboardEvent) {
   isInputingTag.value = false
   inputTag.value = ''
 }
+
+function deleteTag(tag: string) {
+  const index = tagList.value.findIndex(t => t === tag)
+  tagList.value.splice(index, 1)
+}
 </script>
 
 <template>
@@ -124,7 +129,7 @@ function addTag(e: KeyboardEvent) {
           </div>
         </OnClickOutside>
         <Tag v-else @click="isInputingTag = true" />
-        <Tag v-for="tag in tagList" :key="`tag-${tag}`" :tag-name="tag" />
+        <Tag v-for="tag in tagList" :key="`tag-${tag}`" :tag-name="tag" @click="deleteTag(tag)" />
       </div>
       <textarea v-model="question" rows="1" placeholder="主要問題" spellcheck="false" class="bg-app-4 text-app-3 placeholder:text-app-3/50 rounded-xl w-full flex items-center py-4 px-4 outline-none resize-none leading-normal" />
     </div>
