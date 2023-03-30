@@ -116,7 +116,7 @@ function addTag(e: KeyboardEvent) {
     </div>
     <div class="p-4 w-full">
       <textarea ref="textarea" v-model="input" placeholder="大風吹～ 吹什麼？" spellcheck="false" class="text-app-4 placeholder:text-app-4/50 mb-2 min-h-[5rem] w-full outline-none border-none bg-app-3 resize-none" />
-      <div class="pb-2 flex items-center gap-2">
+      <div class="pb-2 flex items-center gap-2 flex-wrap">
         <OnClickOutside v-if="isInputingTag" @trigger="isInputingTag = false">
           <div class="py-[0.2rem] px-[0.7rem] text-sm text-app-4 bg-app-1 rounded-full flex items-center justify-between">
             <input ref="inputRef" v-model="inputTag" name="tag-input" class="bg-app-1 outline-none" @keydown.enter="addTag">
