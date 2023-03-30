@@ -1,10 +1,10 @@
-import { db } from '../plugins/dataController'
-import { createSuccessResponse } from '../utils/index'
+import { createSuccessResponse, getData } from '../utils/index'
 
-export default defineEventHandler((event) => {
+export default defineEventHandler(async (event) => {
+  const db = await getData()
   const query = getQuery(event)
-  const tagIds = db.data.tags_posts_association.filter(t => t.postId === query.postId).map(m => m.tagId)
-  const tagList = db.data.tags.filter(t => tagIds.includes(t.id))
+  const tagIds = db.tags_posts_association.filter(t => t.postId === query.postId).map(m => m.tagId)
+  const tagList = db.tags.filter(t => tagIds.includes(t.id))
 
   return createSuccessResponse(tagList)
 })

@@ -1,7 +1,7 @@
-import { db } from '../plugins/dataController'
-import { createErrorResponse, createSuccessResponse } from '../utils/index'
+import { createErrorResponse, createSuccessResponse, getData, setData } from '../utils/index'
 
 export default defineEventHandler(async (event) => {
+  const db = await getData()
   // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
   if (event.context.auth.userId == null) {
     return createErrorResponse({
@@ -13,22 +13,24 @@ export default defineEventHandler(async (event) => {
     tags: string[]
   }>(event)
 
-  let newTagId = db.data.tags[db.data.tags.length - 1]?.id ?? 0
+  let newTagId = db.tags[db.tags.length - 1]?.id ?? 0
   const tagIdList: number[] = []
 
   body.tags.forEach((tag) => {
-    const existedTag = db.data.tags.find(t => t.name === tag)
+    const existedTag = db.tags.find(t => t.name === tag)
     if (existedTag != null) {
       tagIdList.push(existedTag.id)
       return
     }
 
     tagIdList.push(++newTagId)
-    db.data.tags.push({
+    db.tags.push({
       id: newTagId,
       name: tag,
     })
   })
+
+  await setData(db)
 
   return createSuccessResponse({
     tagIdList,

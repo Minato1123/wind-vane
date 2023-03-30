@@ -1,7 +1,7 @@
-import { db } from '../plugins/dataController'
-import { createErrorResponse, createSuccessResponse } from '../utils/index'
+import { createErrorResponse, createSuccessResponse, getData, setData } from '../utils/index'
 
 export default defineEventHandler(async (event) => {
+  const db = await getData()
   // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
   if (event.context.auth.userId == null) {
     return createErrorResponse({
@@ -15,15 +15,16 @@ export default defineEventHandler(async (event) => {
   }>(event)
 
   body.tagIdList.forEach((tagId) => {
-    const association = db.data.tags_posts_association.find(a => a.postId === body.postId && a.tagId === tagId)
+    const association = db.tags_posts_association.find(a => a.postId === body.postId && a.tagId === tagId)
     if (association != null)
       return
 
-    db.data.tags_posts_association.push({
+    db.tags_posts_association.push({
       tagId,
       postId: body.postId,
     })
   })
+  await setData(db)
 
   return createSuccessResponse(null)
 })

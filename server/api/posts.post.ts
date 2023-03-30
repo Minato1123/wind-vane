@@ -1,7 +1,7 @@
-import { db } from '../plugins/dataController'
-import { createErrorResponse, createSuccessResponse, generatePostId } from '../utils/index'
+import { createErrorResponse, createSuccessResponse, generatePostId, getData, setData } from '../utils/index'
 
 export default defineEventHandler(async (event) => {
+  const db = await getData()
   // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
   if (event.context.auth.userId == null) {
     return createErrorResponse({
@@ -22,7 +22,7 @@ export default defineEventHandler(async (event) => {
 
   let newPostId = generatePostId()
   while (true) {
-    if (db.data.posts.map(p => p.id).includes(newPostId) === false)
+    if (db.posts.map(p => p.id).includes(newPostId) === false)
       break
     newPostId = generatePostId()
   }
@@ -32,7 +32,7 @@ export default defineEventHandler(async (event) => {
 
   const createdTime = `${Date.now()}`
 
-  db.data.posts.push({
+  db.posts.push({
     id: newPostId,
     userId,
     content: body.content,
@@ -40,6 +40,7 @@ export default defineEventHandler(async (event) => {
     createdTime,
     deleted: false,
   })
+  await setData(db)
 
   return createSuccessResponse({ postId: newPostId })
 })

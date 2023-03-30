@@ -1,7 +1,7 @@
-import { db } from '../../plugins/dataController'
-import { createErrorResponse, createSuccessResponse } from '../../utils/index'
+import { createErrorResponse, createSuccessResponse, getData, setData } from '../../utils/index'
 
 export default defineEventHandler(async (event) => {
+  const db = await getData()
   // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
   if (event.context.auth.userId == null) {
     return createErrorResponse({
@@ -16,7 +16,7 @@ export default defineEventHandler(async (event) => {
     response: 'positive' | 'negative'
   }>(event)
 
-  const responsedPost = db.data.responses.find(p => p.postId === postId && p.userId === userId)
+  const responsedPost = db.responses.find(p => p.postId === postId && p.userId === userId)
 
   if (responsedPost == null) {
     return createErrorResponse({
@@ -25,6 +25,7 @@ export default defineEventHandler(async (event) => {
   }
 
   responsedPost.response = body.response
+  await setData(db)
 
   return createSuccessResponse(null)
 })

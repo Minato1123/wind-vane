@@ -1,7 +1,7 @@
-import { db } from '../plugins/dataController'
-import { createErrorResponse, createSuccessResponse } from '../utils/index'
+import { createErrorResponse, createSuccessResponse, getData, setData } from '../utils/index'
 
 export default defineEventHandler(async (event) => {
+  const db = await getData()
   // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
   if (event.context.auth.userId == null) {
     return createErrorResponse({
@@ -16,7 +16,7 @@ export default defineEventHandler(async (event) => {
     newEmail: string
   }>(event)
 
-  const user = db.data.users.find(u => u.id === +userId && u.deleted === false)
+  const user = db.users.find(u => u.id === +userId && u.deleted === false)
 
   if (user == null) {
     return createErrorResponse({
@@ -31,6 +31,7 @@ export default defineEventHandler(async (event) => {
   }
 
   user.email = body.newEmail
+  await setData(db)
 
   return createSuccessResponse(null)
 })

@@ -1,7 +1,7 @@
-import { db } from '../../plugins/dataController'
-import { createErrorResponse, createSuccessResponse } from '../../utils/index'
+import { createErrorResponse, createSuccessResponse, getData, setData } from '../../utils/index'
 
-export default defineEventHandler((event) => {
+export default defineEventHandler(async (event) => {
+  const db = await getData()
   // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
   if ((event.context.auth.userId) == null) {
     return createErrorResponse({
@@ -13,7 +13,7 @@ export default defineEventHandler((event) => {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
   const userId = event.context.auth.userId as number
 
-  const savedPostIndex = db.data.saved_posts.findIndex(p => p.postId === postId && p.userId === userId)
+  const savedPostIndex = db.saved_posts.findIndex(p => p.postId === postId && p.userId === userId)
 
   if (savedPostIndex === -1) {
     return createErrorResponse({
@@ -21,7 +21,8 @@ export default defineEventHandler((event) => {
     })
   }
 
-  db.data.saved_posts.splice(savedPostIndex, 1)
+  db.saved_posts.splice(savedPostIndex, 1)
+  await setData(db)
 
   return createSuccessResponse(null)
 })
