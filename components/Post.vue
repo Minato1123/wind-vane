@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import type { UseShareOptions } from '@vueuse/core'
+import { useShare } from '@vueuse/core'
 import { useUserStore } from '../stores/user'
 import { useGetTagsByPostId } from '~~/composables/api/useGetTagsByPostId'
 import { useGetUserResponseByPostId } from '~~/composables/api/useGetUserResponseByPostId'
@@ -188,6 +190,15 @@ function handleTagNavigate(tag: string) {
 function handlePostNavigate() {
   navigateTo(`/${props.post.postId}`)
 }
+
+const options = ref<UseShareOptions>({
+  title: props.post.question,
+  text: `${props.post.content}`,
+  url: `http://localhost:3000/${props.post.postId}`,
+})
+
+const { share } = useShare(options)
+const startShare = () => share().catch(err => err)
 </script>
 
 <template>
@@ -271,7 +282,7 @@ function handlePostNavigate() {
           {{ negativeData.data.numOfResponse }}
         </span>
       </div>
-      <div class="hover:text-app-8 transition-all duration-200 w-2/6 flex justify-center items-center cursor-pointer">
+      <div class="hover:text-app-8 transition-all duration-200 w-2/6 flex justify-center items-center cursor-pointer" @click="startShare">
         <Icon name="lucide:wind" size="1.5rem" />
       </div>
     </div>
