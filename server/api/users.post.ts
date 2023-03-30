@@ -10,7 +10,8 @@ export default defineEventHandler(async (event) => {
   if (db.users.findIndex(u => u.email === body.email) !== -1)
     return createErrorResponse({ message: 'Duplicated email' })
 
-  const newUserId = db.users[db.users.length - 1].id + 1 ?? 1
+  const lastUser = db.users[db.users.length - 1]
+  const newUserId = lastUser == null ? 1 : lastUser.id + 1
   const createdTime = `${Date.now()}`
 
   db.users.push({

@@ -13,7 +13,8 @@ export default defineEventHandler(async (event) => {
     tags: string[]
   }>(event)
 
-  let newTagId = db.tags[db.tags.length - 1]?.id ?? 0
+  const lastTag = db.tags[db.tags.length - 1]
+  let newTagId = lastTag == null ? 0 : lastTag.id
   const tagIdList: number[] = []
 
   body.tags.forEach((tag) => {
