@@ -16,10 +16,8 @@ export default defineEventHandler(async (event) => {
   }
 
   for (const [token, userId] of tokenMap) {
-    if (userId === user.id) {
+    if (userId === user.id)
       tokenMap.delete(token)
-      break
-    }
   }
 
   const theToken = `${Date.now()}`
