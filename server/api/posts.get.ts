@@ -54,7 +54,7 @@ export default defineEventHandler((event) => {
     postIdList.push(...db.data.posts.map(p => p.id))
   }
 
-  const posts = db.data.posts.filter(p => postIdList.includes(p.id) && p.deleted === false).reverse().splice(start, start + num)
+  const posts = db.data.posts.filter(p => postIdList.includes(p.id) && p.deleted === false).reverse().slice(start, start + num)
 
   return createSuccessResponse(posts)
 })
