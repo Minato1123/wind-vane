@@ -1,7 +1,11 @@
 <script setup lang="ts">
+import { useModalStore } from './stores/modal'
 const isOpenMobileMenu = ref(false)
 const isOpenLoginDialog = ref(false)
 const isOpenRegisterDialog = ref(false)
+
+const { closeWarnLogoutDialog } = useModalStore()
+const { isOpenWarnLogoutDialog } = storeToRefs(useModalStore())
 
 function toggleDialog() {
   isOpenLoginDialog.value = !isOpenLoginDialog.value
@@ -21,6 +25,9 @@ function toggleDialog() {
     </DialogWrapper>
     <DialogWrapper>
       <RegisterDialog v-if="isOpenRegisterDialog" @close-register-dialog="isOpenRegisterDialog = false" @switch-to-login-dialog="toggleDialog" />
+    </DialogWrapper>
+    <DialogWrapper>
+      <InfoDialog v-if="isOpenWarnLogoutDialog" info-content="請重新登入！" :only-read="true" @handle-confirm="closeWarnLogoutDialog" />
     </DialogWrapper>
     <div class="bg-app-1 grow min-h-0">
       <NuxtPage />
