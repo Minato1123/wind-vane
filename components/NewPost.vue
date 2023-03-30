@@ -53,7 +53,6 @@ function handleSubmitPost() {
     return
 
   execute()
-  handleAddTag()
 }
 
 watch(pending, () => {
@@ -69,6 +68,7 @@ watch(pending, () => {
   if (data.value == null || data.value.data == null)
     return
 
+  handleAddTag()
   postId.value = data.value.data.postId
 })
 

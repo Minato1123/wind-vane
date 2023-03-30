@@ -62,14 +62,23 @@ watch(isVisible, () => {
 
   partNumber.value = partNumber.value + postPerPart.value
 })
+
+function handleNewPostRefresh() {
+  postList.value = []
+  partNumber.value = 0
+  isEndOfPost.value = false
+  refresh({ dedupe: true })
+}
 </script>
 
 <template>
   <div ref="root" class="h-full w-full pt-4 pb-12 flex flex-col items-center gap-8 overflow-y-auto">
-    <div class="flex flex-col items-center gap-8">
+    <div class="w-full flex flex-col items-center gap-8">
       <SearchBar />
-      <NewPost v-if="isLoggedin" @refresh-page="refresh" />
-      <div class="flex flex-col items-center gap-8">
+      <NewPost
+        v-if="isLoggedin" @refresh-page="handleNewPostRefresh"
+      />
+      <div class="w-full flex flex-col items-center gap-8">
         <Post
           v-for="post in postList"
           :key="post.id" :post="{
