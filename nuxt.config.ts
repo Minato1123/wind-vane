@@ -17,10 +17,8 @@ export default defineNuxtConfig({
     },
   },
   modules: [
-    '@nuxt/devtools',
     '@nuxtjs/tailwindcss',
     '@vueuse/nuxt',
-    '@nuxtjs/device',
     'nuxt-icon',
     '@formkit/nuxt',
     '@pinia/nuxt',
