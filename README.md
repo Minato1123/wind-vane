@@ -48,11 +48,17 @@
 
   ![](https://i.imgur.com/sUeCvYq.png)
   
-  
+  * 文章顯示（無表態）
+
+  ![](https://i.imgur.com/nWNEOBA.png)
+
   * 文章顯示（正面表態）
 
   ![](https://i.imgur.com/TsjnU7c.png) 
-  
+
+  * 文章顯示（負面表態）
+
+  ![](https://i.imgur.com/pzDbRsD.png)
   
   * 對文章的其他操作
     * 本人發文才能刪除貼文
