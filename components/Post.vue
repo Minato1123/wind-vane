@@ -104,38 +104,38 @@ const { execute: changeResponseToNegativeExecute } = useChangeResponseToNegative
 })
 
 const { execute: deleteResponseExecute } = useDeleteResponse({
-  token: userToken.value,
+  token: userToken,
   postId: props.post.postId,
 })
 
-function handleResponsePositive() {
+async function handleResponsePositive() {
   if (isLoggedin.value === false) {
     isOpenWarnLoginDialog.value = true
     return
   }
 
   if (response.value == null)
-    respondPositiveExecute()
+    await respondPositiveExecute()
   else if (response.value === 'positive')
-    deleteResponseExecute()
+    await deleteResponseExecute()
   else
-    changeResponseToPositiveExecute()
+    await changeResponseToPositiveExecute()
 
   responseExecute()
 }
 
-function handleResponseNegative() {
+async function handleResponseNegative() {
   if (isLoggedin.value === false) {
     isOpenWarnLoginDialog.value = true
     return
   }
 
   if (response.value == null)
-    respondNegativeExecute()
+    await respondNegativeExecute()
   else if (response.value === 'negative')
-    deleteResponseExecute()
+    await deleteResponseExecute()
   else
-    changeResponseToNegativeExecute()
+    await changeResponseToNegativeExecute()
 
   responseExecute()
 }
