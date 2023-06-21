@@ -60,6 +60,9 @@ watch(isVisible, () => {
   if (isVisible.value === false || isEndOfPost.value === true)
     return
 
+  if (postList.value.length <= 0)
+    return
+
   partNumber.value = partNumber.value + postPerPart.value
 })
 
@@ -88,7 +91,7 @@ function handleNewPostRefresh() {
             question: post.question,
             createdTime: post.createdTime,
           }"
-          @refresh-page="refresh"
+          @refresh-page="handleNewPostRefresh"
         />
       </div>
     </div>

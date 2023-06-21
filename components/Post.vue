@@ -155,8 +155,8 @@ const { execute: deletePostExecute } = useDeletePost({
   token: userToken,
 })
 
-function handleDeletePost() {
-  deletePostExecute()
+async function handleDeletePost() {
+  await deletePostExecute()
   isOpenDeletePostCheckDialog.value = false
   emit('refreshPage')
 }
